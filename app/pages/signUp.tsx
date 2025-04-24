@@ -4,6 +4,10 @@ import { TextFiled } from "@/components/ui/TextFiled";
 import { NormalButton } from "@/components/ui/Button";
 import { Formik } from "formik";
 import * as Yup from "yup";
+import { useEffect } from "react";
+import { useAPI } from "@/API/hooks/useAPI";
+import { SIGNUP } from "@/API/constacts";
+import { useRouter, Link } from 'expo-router';
 
 const SignUpSchema = Yup.object().shape({
   username: Yup.string().required("Username is required"),
@@ -14,7 +18,10 @@ const SignUpSchema = Yup.object().shape({
     .required("Confirm your password"),
 });
 
-export const SignUp = () => {
+ const SignUp = () => {
+  const { post } = useAPI();
+  const router = useRouter();
+
   return (
     <LinearGradient colors={["#fff", "#fff"]} style={styles.signInContainer}>
       <View style={styles.h1Wrapper}>
@@ -30,9 +37,18 @@ export const SignUp = () => {
             confirmPassword: "",
           }}
           validationSchema={SignUpSchema}
-          onSubmit={(values) => {
-            alert('bharath')
-            console.log("Form Data", values);
+          onSubmit={async (values) => {
+            const newUser = {
+              userName: values.username,
+              email: values.email,
+              password: values.password,
+            };
+              const response = await post(SIGNUP, newUser);
+              console.log("Response: ", response);
+              if(response.success) {
+                alert ("User created successfully!");	
+                router.push("/pages/signIn"); // or '/pages/signIn' based on your folder
+              }
           }}
         >
           {({
@@ -97,7 +113,7 @@ export const SignUp = () => {
                 onPress={handleSubmit}
                 style={{ marginTop: 10, width: "100%" }}
                 loading={isSubmitting}
-                type  ="submit"
+                type="submit"
               />
             </>
           )}
@@ -105,7 +121,7 @@ export const SignUp = () => {
 
         <View style={styles.singInFooter}>
           <Text style={styles.footText}>Already have an account?</Text>
-          <Text style={styles.footerText}>Sign UP</Text>
+          <Link href="pages/signIn" style={styles.footerText}>Sign In</Link>
         </View>
       </View>
     </LinearGradient>
@@ -168,3 +184,5 @@ const styles = StyleSheet.create({
     marginLeft: 4,
   },
 });
+
+export default SignUp;
