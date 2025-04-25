@@ -8,17 +8,21 @@ import { Formik } from "formik";
 import * as Yup from "yup";
 import { SIGNIN } from "@/API/constacts";
 import { useAPI } from "@/API/hooks/useAPI";
+import { authStore } from "@/store/authStore";
 
 const SignIn = () => {
   const router = useRouter();
   const { post } = useAPI();
+  const {  setIsAuthenticated, setUser } = authStore();
   const handleNavigate = () => {
-    router.push("/pages/signUp");
+    router.push("/pages/onBoardScreen/signUp");
   };
 
   const SignInSchema = Yup.object().shape({
     email: Yup.string().email("Invalid email").required("Email is required"),
-    password: Yup.string().min(6, "Too short!").required("Password is required"),
+    password: Yup.string()
+      .min(6, "Too short!")
+      .required("Password is required"),
   });
 
   return (
@@ -41,12 +45,25 @@ const SignIn = () => {
           const user = {
             email: values.email,
             password: values.password,
-          }
+          };
           const response = await post(SIGNIN, user);
-          console.log("Response: ", response);
+          setIsAuthenticated(response.success)
+          console.log ("Response:", response);
+          if (response.success) {
+            setUser(response.user.userName, response.user.email);
+            alert("User logged in successfully!");
+            router.push("/pages/dashboard/dashboard"); // or '/pages/signIn' based on your folder
+          }
         }}
       >
-        {({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => (
+        {({
+          handleChange,
+          handleBlur,
+          handleSubmit,
+          values,
+          errors,
+          touched,
+        }) => (
           <View style={styles.loginSection}>
             <TextFiled
               label="Email"

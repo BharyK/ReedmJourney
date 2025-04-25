@@ -47,7 +47,7 @@ const SignUpSchema = Yup.object().shape({
               console.log("Response: ", response);
               if(response.success) {
                 alert ("User created successfully!");	
-                router.push("/pages/signIn"); // or '/pages/signIn' based on your folder
+                router.push("/pages/onBoardScreen/signIn"); // or '/pages/signIn' based on your folder
               }
           }}
         >
