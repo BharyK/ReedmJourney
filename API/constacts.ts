@@ -1,4 +1,4 @@
-export const API_BASE_URL = "http://10.0.2.2:5000/redeem";
+export const API_BASE_URL = "https://redeemjourney-be-4are.onrender.com/redeem";
 
 const SIGNUP = `${API_BASE_URL}/auth/signup`; //Signup API endoint
 const SIGNIN = `${API_BASE_URL}/auth/signIn`; //Login API endpoint

@@ -121,7 +121,7 @@ const SignUpSchema = Yup.object().shape({
 
         <View style={styles.singInFooter}>
           <Text style={styles.footText}>Already have an account?</Text>
-          <Link href="pages/signIn" style={styles.footerText}>Sign In</Link>
+          <Link href="pages/onBoardScreen/signIn" style={styles.footerText}>Sign In</Link>
         </View>
       </View>
     </LinearGradient>

@@ -14,7 +14,7 @@ import { NormalButton } from "@/components/ui/Button";
 import RewardCard from "./RewardCard";
 import { authStore } from "@/store/authStore";
 import { speedStore } from "@/store/speedStore";
-import DrawerComponent from "@/components/ui/Drawer";
+import { useRouter, Link } from 'expo-router';
 
 type DashboardProps = {
   navigation: any;
@@ -59,9 +59,7 @@ const Dashboard:React.FC<DashboardProps> = ({navigation}) => {
                 </Text>
               </View>
               <View style={styles.dotsIconContainer}>
-                <TouchableOpacity onPress={() => navigation.openDrawer()}>
-                  <Avatar.Text size={50} label="XD" />
-                </TouchableOpacity>
+                  <Link href="pages/onBoardScreen/signIn" style = {styles.logout}>Log Out</Link>
                 {/* <IconButton
             icon="dots-vertical"
             size={34}
@@ -211,6 +209,14 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     borderRadius: 10,
   },
+  logout: {
+    fontSize: 20,
+    fontWeight: "600",
+    color: "#fff",
+   // textAlign: "left",
+    textTransform: "uppercase",
+    marginLeft: 4,
+  }
 });
 
 export default Dashboard;

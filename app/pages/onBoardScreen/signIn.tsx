@@ -1,4 +1,11 @@
-import { Text, StyleSheet, View, Image, TouchableOpacity } from "react-native";
+import {
+  Text,
+  StyleSheet,
+  View,
+  Image,
+  TouchableOpacity,
+  ScrollView,
+} from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { TextFiled } from "@/components/ui/TextFiled";
 import { NormalButton } from "@/components/ui/Button";
@@ -13,7 +20,7 @@ import { authStore } from "@/store/authStore";
 const SignIn = () => {
   const router = useRouter();
   const { post } = useAPI();
-  const {  setIsAuthenticated, setUser } = authStore();
+  const { setIsAuthenticated, setUser } = authStore();
   const handleNavigate = () => {
     router.push("/pages/onBoardScreen/signUp");
   };
@@ -27,88 +34,94 @@ const SignIn = () => {
 
   return (
     <LinearGradient colors={["#fff", "#fff"]} style={styles.signInContainer}>
-      <Image
-        source={require("@/assets/images/logo.jpg")}
-        style={styles.image}
-        resizeMode="contain"
-      />
-      <View style={styles.h1Wrapper}>
-        <Text style={styles.welcomeText}>Welcome</Text>
-        <Text style={styles.backText}>Back!</Text>
-      </View>
-      <Formik
-        initialValues={{ email: "", password: "" }}
-        validationSchema={SignInSchema}
-        onSubmit={async (values) => {
-          console.log("Form Values:", values);
-          // handle actual login logic
-          const user = {
-            email: values.email,
-            password: values.password,
-          };
-          const response = await post(SIGNIN, user);
-          setIsAuthenticated(response.success)
-          console.log ("Response:", response);
-          if (response.success) {
-            setUser(response.user.userName, response.user.email);
-            alert("User logged in successfully!");
-            router.push("/pages/dashboard/dashboard"); // or '/pages/signIn' based on your folder
-          }
-        }}
+      <ScrollView
+        contentContainerStyle={{ paddingBottom: 100, alignItems: "center" }}
+        showsVerticalScrollIndicator={false}
       >
-        {({
-          handleChange,
-          handleBlur,
-          handleSubmit,
-          values,
-          errors,
-          touched,
-        }) => (
-          <View style={styles.loginSection}>
-            <TextFiled
-              label="Email"
-              placeholder="Enter your email"
-              mode="outlined"
-              value={values.email}
-              onChangeText={handleChange("email")}
-              onBlur={handleBlur("email")}
-              icon="email"
-              error={touched.email && errors.email}
-            />
-            <TextFiled
-              label="Password"
-              placeholder="Enter your password"
-              mode="outlined"
-              value={values.password}
-              onChangeText={handleChange("password")}
-              onBlur={handleBlur("password")}
-              icon="lock"
-              isPassword={true}
-              error={touched.password && errors.password}
-            />
-            <NormalButton
-              label="Sign In"
-              mode="contained"
-              onPress={handleSubmit}
-              style={{ marginTop: 10, width: "100%" }}
-              loading={false}
-            />
-            <Text style={styles.forgetPassword}>Forget password?</Text>
-            <View style={styles.singInFooter}>
-              <Text style={styles.footText}>Don't have an account?</Text>
-              <TouchableOpacity onPress={handleNavigate}>
-                <Text style={styles.footerText}>Sign UP</Text>
-              </TouchableOpacity>
+        <Image
+          source={require("@/assets/images/logo.jpg")}
+          style={styles.image}
+          resizeMode="contain"
+        />
+
+        <View style={styles.h1Wrapper}>
+          <Text style={styles.welcomeText}>Welcome</Text>
+          <Text style={styles.backText}>Back!</Text>
+        </View>
+        <Formik
+          initialValues={{ email: "", password: "" }}
+          validationSchema={SignInSchema}
+          onSubmit={async (values) => {
+            console.log("Form Values:", values);
+            // handle actual login logic
+            const user = {
+              email: values.email,
+              password: values.password,
+            };
+            const response = await post(SIGNIN, user);
+            setIsAuthenticated(response.success);
+            console.log("Response:", response);
+            if (response.success) {
+              setUser(response.user.userName, response.user.email);
+              alert("User logged in successfully!");
+              router.push("/pages/dashboard/dashboard"); // or '/pages/signIn' based on your folder
+            }
+          }}
+        >
+          {({
+            handleChange,
+            handleBlur,
+            handleSubmit,
+            values,
+            errors,
+            touched,
+          }) => (
+            <View style={styles.loginSection}>
+              <TextFiled
+                label="Email"
+                placeholder="Enter your email"
+                mode="outlined"
+                value={values.email}
+                onChangeText={handleChange("email")}
+                onBlur={handleBlur("email")}
+                icon="email"
+                error={touched.email && errors.email}
+              />
+              <TextFiled
+                label="Password"
+                placeholder="Enter your password"
+                mode="outlined"
+                value={values.password}
+                onChangeText={handleChange("password")}
+                onBlur={handleBlur("password")}
+                icon="lock"
+                isPassword={true}
+                error={touched.password && errors.password}
+              />
+              <NormalButton
+                label="Sign In"
+                mode="contained"
+                onPress={handleSubmit}
+                style={{ marginTop: 10, width: "100%" }}
+                loading={false}
+              />
+              <Text style={styles.forgetPassword}>Forget password?</Text>
+              <View style={styles.singInFooter}>
+                <Text style={styles.footText}>Don't have an account?</Text>
+                <TouchableOpacity onPress={handleNavigate}>
+                  <Text style={styles.footerText}>Sign UP</Text>
+                </TouchableOpacity>
+              </View>
             </View>
-          </View>
-        )}
-      </Formik>
-      <Text style={styles.orText}>OR</Text>
-      <View style={styles.underline} />
-      <View style={styles.socialSite}>
-        <FontAwesome name="whatsapp" size={60} color="#25D366" />
-        <AntDesign name="google" size={60} color="#DB4437" />
-      </View>
+          )}
+        </Formik>
+        <Text style={styles.orText}>OR</Text>
+        <View style={styles.underline} />
+        <View style={styles.socialSite}>
+          <FontAwesome name="whatsapp" size={60} color="#25D366" />
+          <AntDesign name="google" size={60} color="#DB4437" />
+        </View>
+      </ScrollView>
     </LinearGradient>
   );
 };
@@ -119,10 +132,9 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     width: "100%",
-    overflow: "scroll",
   },
   loginSection: {
-    width: "80%",
+    width: "100%",
     justifyContent: "center",
     alignItems: "center",
   },
